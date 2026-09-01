@@ -1,6 +1,7 @@
 import os
 from dotenv import load_dotenv
 from openai import OpenAI
+from cli import get_args
 
 _ = load_dotenv()
 api_key = os.environ.get("OPENROUTER_API_KEY")
@@ -13,12 +14,14 @@ client = OpenAI(
 )
 
 def main():
+    user_prompt = get_args().user_prompt
+
     response = client.chat.completions.create(
         model="openrouter/free",
         messages=[
             {
                 "role": "user",
-                "content": "Describe an ai agent? Use one paragraph maximum."
+                "content": user_prompt
             }
         ]
     )
