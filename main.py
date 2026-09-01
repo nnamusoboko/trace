@@ -1,7 +1,6 @@
 import os
 from dotenv import load_dotenv
 from openai import OpenAI
-from openai.types.admin.organization import role
 
 _ = load_dotenv()
 api_key = os.environ.get("OPENROUTER_API_KEY")
@@ -23,6 +22,17 @@ def main():
             }
         ]
     )
+    if not response.usage:
+        raise RuntimeError("Failed request to API")
+
+    print(
+         f"""
+            Prompt tokens: {response.usage.prompt_tokens}
+            Response tokens: {response.usage.completion_tokens}
+            total tokens: {response.usage.total_tokens}
+         """
+     )
+
     print(f"response: {response.choices[0].message.content}")
 
 
