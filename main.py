@@ -16,7 +16,8 @@ client = OpenAI(
 )
 
 def main():
-    user_prompt = get_args().user_prompt
+    args = get_args()
+    user_prompt = args.user_prompt
 
     messages: list[ChatCompletionMessageParam] = [{"role": "user", "content": user_prompt}]
 
@@ -27,13 +28,15 @@ def main():
     if not response.usage:
         raise RuntimeError("Failed request to API")
 
-    print(
-         f"""
-            Prompt tokens: {response.usage.prompt_tokens}
-            Response tokens: {response.usage.completion_tokens}
-            total tokens: {response.usage.total_tokens}
-         """
-     )
+    if args.verbose:
+        print(
+            f"""
+                User prompt: {user_prompt}
+                Prompt tokens: {response.usage.prompt_tokens}
+                Response tokens: {response.usage.completion_tokens}
+                total tokens: {response.usage.total_tokens}
+            """
+        )
 
     print(f"response: {response.choices[0].message.content}")
 
