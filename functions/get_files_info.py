@@ -13,10 +13,18 @@ def get_files_info(working_directory: str, directory: str = ".") -> str:
         if not os.path.isdir(target_dir):
             return f'Error: "{directory}" is not a directory'
 
-        return f'Success: "{directory}" is within the working directory'
+        files_in_dir = os.listdir(target_dir)
+        files_info: list[str] = []
+        for file in files_in_dir:
+            full_filepath = os.path.join(target_dir, file)
+            files_info.append(
+                f"- {file}: file_size={os.path.getsize(full_filepath)} bytes, is_dir={os.path.isdir(full_filepath)}"
+            )
+        return "\n".join(files_info)
+
     except Exception as e:
         return f"Error: {e}"
 
 
 if __name__ == "__main__":
-    print(get_files_info("/calculator", "/calculator"))
+    print(get_files_info(".venv", "bin"))
