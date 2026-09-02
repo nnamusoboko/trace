@@ -1,6 +1,8 @@
 import os
 from dotenv import load_dotenv
 from openai import OpenAI
+from openai.types.chat import ChatCompletionMessageParam
+
 from cli import get_args
 
 _ = load_dotenv()
@@ -16,14 +18,11 @@ client = OpenAI(
 def main():
     user_prompt = get_args().user_prompt
 
+    messages: list[ChatCompletionMessageParam] = [{"role": "user", "content": user_prompt}]
+
     response = client.chat.completions.create(
         model="openrouter/free",
-        messages=[
-            {
-                "role": "user",
-                "content": user_prompt
-            }
-        ]
+        messages=messages
     )
     if not response.usage:
         raise RuntimeError("Failed request to API")
