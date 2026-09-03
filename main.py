@@ -4,6 +4,7 @@ from openai import OpenAI
 from openai.types.chat import ChatCompletionMessageParam
 
 from cli import get_args
+import prompts
 
 _ = load_dotenv()
 api_key = os.environ.get("OPENROUTER_API_KEY")
@@ -19,7 +20,10 @@ def main():
     args = get_args()
     user_prompt = args.user_prompt
 
-    messages: list[ChatCompletionMessageParam] = [{"role": "user", "content": user_prompt}]
+    messages: list[ChatCompletionMessageParam] = [
+        {"role": "system", "content": prompts.system_prompt},
+        {"role": "user", "content": user_prompt}
+    ]
 
     response = client.chat.completions.create(
         model="openrouter/free",
