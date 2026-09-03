@@ -1,5 +1,7 @@
 import os
 import subprocess
+
+from openai.types.chat import ChatCompletionToolParam
 import config
 
 def run_python_file(
@@ -52,3 +54,27 @@ def build_output_string(result: subprocess.CompletedProcess[str]) -> str:
             output_strs.append(f"STDERR: {result.stderr}")
 
     return "\n".join(output_strs)
+
+schema_run_python_file: ChatCompletionToolParam = {
+    "type": "function",
+    "function": {
+        "name": "run_python_file",
+        "description": "Run a python script in a sub-process and produce output",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "file_path": {
+                    "type": "string",
+                    "description": "Filepath of file to execute relative to working directory"
+                },
+                "args": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "description": "List of commands to run to execute python file",
+                }
+            }
+        }
+    }
+}
