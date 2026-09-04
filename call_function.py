@@ -11,7 +11,7 @@ from functions.get_file_content import get_file_content, schema_get_file_content
 from functions.get_files_info import get_files_info, schema_get_files_info
 from functions.run_code import run_python_file, schema_run_python_file
 from functions.write_to_file import schema_write_file, write_file
-
+import config
 
 class ToolCallResultMessage(TypedDict):
     role: str
@@ -49,7 +49,7 @@ def call_function(tool_call: ChatCompletionMessageFunctionToolCall, verbose: boo
             "content": f"Error: Unknown function: {function_name}",
         }
 
-    function_args["working_directory"] = "./calculator"
+    function_args["working_directory"] = config.WORKING_DIR
 
     result = function_map[function_name](**function_args)
     return {

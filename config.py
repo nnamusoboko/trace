@@ -1,2 +1,3 @@
 MAX_CHARS = 10000
 PROCESS_TIME = 30
+WORKING_DIR = "./calculator"
