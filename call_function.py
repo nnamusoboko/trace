@@ -43,9 +43,9 @@ def call_function(tool_call: ChatCompletionMessageFunctionToolCall, verbose: boo
             "content": f"Error: Unknown function: {function_name}",
         }
 
-    function_args["working_directory"] = config.WORKING_DIR
+    call_args = {"working_directory": config.WORKING_DIR, **function_args}
 
-    result = function_map[function_name](**function_args)
+    result = function_map[function_name](**call_args)
     return {
         "role": "tool",
         "tool_call_id": tool_call.id,
