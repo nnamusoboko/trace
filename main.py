@@ -1,12 +1,12 @@
-import json
 import os
+
 from dotenv import load_dotenv
 from openai import OpenAI
 from openai.types.chat import ChatCompletionMessageParam
 
-from cli import get_args
 import prompts
-from call_function import available_functions
+from call_function import available_functions, call_function
+from cli import get_args
 
 _ = load_dotenv()
 api_key = os.environ.get("OPENROUTER_API_KEY")
@@ -35,7 +35,8 @@ def main():
     if not response.usage:
         raise RuntimeError("Failed request to API")
 
-    if args.verbose:
+    is_verbose = args.verbose
+    if is_verbose:
         print(
             f"""
                 User prompt: {user_prompt}
@@ -52,8 +53,13 @@ def main():
     if message.tool_calls:
         for tool_call in message.tool_calls:
             if tool_call.type == "function":
-                function_args = json.loads(tool_call.function.arguments or "{}")
-                print(f"Calling function: {tool_call.function.name}({function_args})")
+                result = call_function(tool_call, is_verbose)
+                if not result["content"]:
+                    raise Exception("Tool function call didnt produce any result")
+
+                if is_verbose:
+                    print(f"-> {result['content']}")
+
 
 
 
