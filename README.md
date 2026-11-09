@@ -86,3 +86,8 @@ User Request ──> LLM Loop ──> Tool Call (read/write/run) ──> Subproc
 2. **Tool Selection:** The LLM decides which tools (`get_files_info`, `get_file_content`, `write_file`, `run_python_file`) to invoke.
 3. **Local Execution:** Functions run locally via safe subprocesses with execution timeouts to prevent infinite loops.
 4. **Verification Loop:** Results return to the LLM to inspect, fix bugs, or verify script outputs until the task finishes.
+
+
+## Acknowledgements
+
+Guided project from [boot.dev](https://www.boot.dev/courses/build-ai-agent-python)
